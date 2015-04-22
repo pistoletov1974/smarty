@@ -68,8 +68,8 @@
  *	#define NRF24L01_CE_PIN				GPIO_Pin_8
  * 	
  */
-#ifndef TM_NRF24L01_H
-#define TM_NRF24L01_H 101
+#ifndef AT_NRF24L01_H
+#define AT_NRF24L01_H 101
 /**
  * Library dependencies
  * - STM32F4xx
@@ -83,10 +83,10 @@
  * Includes
  */
 #include "stm32f10x.h"
-#include "stm32f10x_rcc.h"
-#include "stm32f10x_gpio.h"
-#include "at_stm32f4_spi.h"
-#include "defines.h"
+//#include "stm32f10x_rcc.h"
+//#include "stm32f10x_gpio.h"
+//#include "at_stm32f4_spi.h"
+//#include "defines.h"
 
 //Set default SPI used
 #ifndef NRF24L01_SPI

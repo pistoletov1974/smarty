@@ -1,15 +1,17 @@
 #include "stm32f10x.h"                  // Device header
 #include "main.h"
 #include "at_stm32f10x_usart.h" 
+#include "at_stm32f10x_nrf24l01.h" 
 #include "stdio.h"
 #include "delay.h"
-
+#include "nrf24l01.h"
 
 
 int main (void)
 {
 	char buf[80];
   uint8_t state=0, newstate=0;
+	unsigned char i,v;
 	//extern uint32_t SystemCoreClock; 
 	
 	
@@ -22,6 +24,7 @@ int main (void)
 	GPIO_CONFIG();
 	TIM_CONFIG();
 	MY_USART_CONFIG();
+	nRF24_init();
 	
 	//startup code
 	AT_USART_Puts(USART2, "Hello world\n\r");
@@ -30,7 +33,26 @@ int main (void)
 	TIM_SetCounter(TIM1,0);
 
 
+if (nRF24_Check() != 0)
+	{
+		AT_USART_Puts(USART2,"Got wrong answer from SPI device.\n");
+		AT_USART_Puts(USART2,"MCU is now halt.\n");
+		while(1);
+	}
 
+//print nrf registers
+	
+	for (i = 0; i < 0x1D; i++) {
+	
+		v = nRF24_ReadReg(i);
+		sprintf(buf,"REG[%d]=%d\r\n",i,v);
+		AT_USART_Puts(USART2,buf);
+	
+	}
+	
+	
+	
+	
 	while (1)
 	{
     //TIM1->CNT = 0;
@@ -96,9 +118,6 @@ int main (void)
 	GPIO_InitStruct.GPIO_Speed=GPIO_Speed_10MHz;
   GPIO_InitStruct.GPIO_Mode = GPIO_Mode_IN_FLOATING;
 	GPIO_Init(GPIOA, &GPIO_InitStruct);
-	
-	
-	
 	
 	}
 
