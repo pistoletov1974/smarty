@@ -45,7 +45,7 @@ if (nRF24_Check() != 0)
 	for (i = 0; i < 0x1D; i++) {
 	
 		v = nRF24_ReadReg(i);
-		sprintf(buf,"REG[%d]=%d\r\n",i,v);
+		sprintf(buf,"REG[%d]=%02x\r\n",i,v);
 		AT_USART_Puts(USART2,buf);
 	
 	}
@@ -137,5 +137,12 @@ void MY_USART_CONFIG(void)
 
  
 	}
+void IT_CONFIG (void)
+{
+	GPIO_EXTILineConfig(GPIO_PortSourceGPIOB,GPIO_PinSource10);
+	EXTI_InitTypeDef EXTIInit;
+	EXTIInit.EXTI_Line=EXTI_Line10;
 	
-
+	
+	
+}

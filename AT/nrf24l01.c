@@ -45,7 +45,7 @@ void nRF24_init()
 	
 	// Configure SPI pins
 	PORT.GPIO_Speed = GPIO_Speed_50MHz;
-	PORT.GPIO_Pin = SPI_SCK_PIN | SPI_MISO_PIN | SPI_MOSI_PIN;
+	PORT.GPIO_Pin = SPI_SCK_PIN |  SPI_MOSI_PIN;
 	PORT.GPIO_Mode = GPIO_Mode_AF_PP;
 	GPIO_Init(SPI_GPIO_PORT,&PORT);
 	// Configure CS pin as output with Push-Pull
@@ -57,7 +57,7 @@ void nRF24_init()
 	PORT.GPIO_Mode = GPIO_Mode_Out_PP;
 	GPIO_Init(nRF24_CE_PORT,&PORT);
 	// Configure IRQ pin as input with Pull-Up
-	PORT.GPIO_Pin = nRF24_IRQ_PIN;
+	PORT.GPIO_Pin = nRF24_IRQ_PIN | SPI_MISO_PIN ;
 	PORT.GPIO_Mode = GPIO_Mode_IPU;
 	GPIO_Init(nRF24_IRQ_PORT,&PORT);
 

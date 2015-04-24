@@ -15,13 +15,7 @@
 	#define SPI_MOSI_PIN  GPIO_Pin_15    // PB15
 	#define SPI_CS_PIN    GPIO_Pin_12    // PB12
 	#define SPI_GPIO_PORT GPIOB
-#elif _SPI_PORT == 3
-	#define SPI_PORT      SPI3
-	#define SPI_SCK_PIN   GPIO_Pin_3     // PB3  (JTDO)
-	#define SPI_MISO_PIN  GPIO_Pin_4     // PB4  (NJTRST)
-	#define SPI_MOSI_PIN  GPIO_Pin_5     // PB5
-	#define SPI_CS_PIN    GPIO_Pin_6     // PB6
-	#define SPI_GPIO_PORT GPIOB
+
 #endif
 
 // nRF24L01 CE (Chip Enable) pin
