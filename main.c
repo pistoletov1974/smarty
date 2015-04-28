@@ -5,6 +5,7 @@
 #include "stdio.h"
 #include "delay.h"
 #include "nrf24l01.h"
+#include "I2CRoutines.h"
 
 
 int main (void)
@@ -12,6 +13,7 @@ int main (void)
 	char buf[80];
   uint8_t state=0, newstate=0;
 	unsigned char i,v;
+	uint32_t st,en;
 	//extern uint32_t SystemCoreClock; 
 	
 	
@@ -25,12 +27,49 @@ int main (void)
 	TIM_CONFIG();
 	MY_USART_CONFIG();
 	nRF24_init();
+	DWT_Init();
+	SystemCoreClockUpdate();
+  I2C_LowLevel_Init(I2C1);
+	
+	
+	     I2C_Master_BufferWrite(I2C1, Buffer_Init,29,DMA, 0x78);
+	
+			 
+			 
+		//   OledBmp();
+		  OledCls();
+	 CharBig(17,0,0);
+	 CharBig(14,1,0);
+	 CharBig(12,2,0);
+	 CharBig(2,3,0);
+	 CharBig(7,4,0);
+	 CharBig(16,5,0);
+	 CharBig(5,6,0);
+	 CharBig(15,7,0);
+	 	 CharMedium(0,0,2);
+	 CharMedium(1,1,2);
+	 CharMedium(2,2,2);
+	 CharMedium(3,3,2);
+	 CharMedium(4,4,2);
+	 CharMedium(5,5,2);
+	 CharMedium(6,6,2);
+	 CharMedium(7,7,2);
+	 CharMedium(8,8,2);
+	 CharMedium(9,9,2);
+	 CharMedium(11,10,2);
+	 CharMedium(12,11,2);
+	
+	
 	
 	//startup code
 	AT_USART_Puts(USART2, "Hello world\n\r");
 	sprintf(buf,"%d \r\n",SystemCoreClock);	
 	AT_USART_Puts(USART2,buf);
-	TIM_SetCounter(TIM1,0);
+
+		  // OledCls();
+			 TIM_SetCounter(TIM1,0);
+
+	
 
 
 if (nRF24_Check() != 0)
@@ -57,7 +96,7 @@ if (nRF24_Check() != 0)
 	{
     //TIM1->CNT = 0;
 		
-		state= TIM_GetCounter(TIM1);
+		state= TIM_GetCounter(TIM1)/2;
 		if (state>=95) 	TIM_SetCounter(TIM1,95);
 		if (state!=newstate)
 		{
@@ -103,9 +142,12 @@ if (nRF24_Check() != 0)
 
 	// ENCODER INPUTS
 	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_9 | GPIO_Pin_10;
-	GPIO_InitStruct.GPIO_Mode=GPIO_Mode_IN_FLOATING;
+	GPIO_InitStruct.GPIO_Mode=GPIO_Mode_IPU;
 	GPIO_InitStruct.GPIO_Speed=GPIO_Speed_2MHz;
 	GPIO_Init(GPIOA, &GPIO_InitStruct);
+	//GPIO_PinRemapConfig(GPIO_PartialRemap_TIM1, ENABLE);
+  
+	
 	
   // USART PINS Tx pin pa2
 	GPIO_InitStruct.GPIO_Pin=GPIO_Pin_2;
@@ -142,6 +184,25 @@ void IT_CONFIG (void)
 	GPIO_EXTILineConfig(GPIO_PortSourceGPIOB,GPIO_PinSource10);
 	EXTI_InitTypeDef EXTIInit;
 	EXTIInit.EXTI_Line=EXTI_Line10;
+	
+	
+	
+	// Interrupt for i2c OLED display communication
+	    /* 1 bit for pre-emption priority, 3 bits for subpriority */
+    NVIC_PriorityGroupConfig(NVIC_PriorityGroup_4);
+
+    NVIC_SetPriority(I2C1_EV_IRQn, 0x00); 
+    NVIC_EnableIRQ(I2C1_EV_IRQn);
+
+    NVIC_SetPriority(I2C1_ER_IRQn, 0x01); 
+    NVIC_EnableIRQ(I2C1_ER_IRQn);
+    
+    
+    NVIC_SetPriority(I2C2_EV_IRQn, 0x00);
+    NVIC_EnableIRQ(I2C2_EV_IRQn);
+
+    NVIC_SetPriority(I2C2_ER_IRQn, 0x01); 
+    NVIC_EnableIRQ(I2C2_ER_IRQn);
 	
 	
 	
