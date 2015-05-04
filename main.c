@@ -20,44 +20,19 @@ int main (void)
 	// enable clock to peripherials
 	
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA | RCC_APB2Periph_AFIO | RCC_APB2Periph_TIM1, ENABLE);
-	RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2,ENABLE);
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2 | RCC_APB1Periph_TIM2,ENABLE);
+	
 	
 	//init routines
 	GPIO_CONFIG();
 	TIM_CONFIG();
 	MY_USART_CONFIG();
 	nRF24_init();
-	DWT_Init();
+	//DWT_Init(); //using for microseconds delay
 	SystemCoreClockUpdate();
-  I2C_LowLevel_Init(I2C1);
+  //I2C_LowLevel_Init(I2C1);
+
 	
-	
-	     I2C_Master_BufferWrite(I2C1, Buffer_Init,29,DMA, 0x78);
-	
-			 
-			 
-		//   OledBmp();
-		  OledCls();
-	 CharBig(17,0,0);
-	 CharBig(14,1,0);
-	 CharBig(12,2,0);
-	 CharBig(2,3,0);
-	 CharBig(7,4,0);
-	 CharBig(16,5,0);
-	 CharBig(5,6,0);
-	 CharBig(15,7,0);
-	 	 CharMedium(0,0,2);
-	 CharMedium(1,1,2);
-	 CharMedium(2,2,2);
-	 CharMedium(3,3,2);
-	 CharMedium(4,4,2);
-	 CharMedium(5,5,2);
-	 CharMedium(6,6,2);
-	 CharMedium(7,7,2);
-	 CharMedium(8,8,2);
-	 CharMedium(9,9,2);
-	 CharMedium(11,10,2);
-	 CharMedium(12,11,2);
 	
 	
 	
